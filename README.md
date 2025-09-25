@@ -117,7 +117,7 @@ This project does not auto-download data. Place the following files in `./data/`
 pip install pandas numpy statsmodels linearmodels matplotlib geopandas shapely pyproj us
 
 ### Running the analysis
-python copd_pm10_panel.py
+python AirQualityCA.py
 
 > Place all input CSVs in ./data/. Outputs will be written to ./outputs/.
 
