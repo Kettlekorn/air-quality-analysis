@@ -7,8 +7,7 @@ Author: Brandon Wu
 ## Overview
 In this project I examine the relationship between ambient air pollution (PM10 concentrations) and hospitalization rates for Chronic Obstructive Pulmonary Disease (COPD) across California counties. This work replicates and extends my original R analysis by implementing the full workflow in Python, including data cleaning, merging, lag construction, regression modeling, and multiple-testing adjustment.
 
-The Python version emphasizes panel data methods and count models, while still allowing replication of the per-county OLS with Benjamini–Hochberg corrections from the R project.
-
+The Python version emphasizes panel data methods and count models, while still allowing replication of the per-county OLS with Benjamini–Hochberg corrections from the R project. For transparency, I’ve included the original R Markdown (`AQICOPDProject.Rmd`) as an archival artifact. Supporting/knitted files are intentionally omitted to keep the repository lean; the R version covered a smaller county subset as an early prototype, and the Python pipeline generalizes it with a unified panel count model
 ---
 
 ## Data Sources
