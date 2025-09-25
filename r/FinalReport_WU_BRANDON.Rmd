@@ -1,0 +1,140 @@
+---
+title: 'Air Quality and Chronic Obstructive Pulmonary Disease'
+author: "Brandon Wu"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **Abstract:**
+
+To investigate whether a statistically significant correlation exists between PM10 particle concentrations in the air and the prevalence of chronic obstructive pulmonary disease in California, my analysis utilizes integrating air quality index data with hospitalization records before applying linear regression models across multiple counties. Since COPD develops gradually over time due to prolonged exposure to air pollutants, the study incorporated gap periods ranging from 1 to 9 years to assess potential delayed effects of PM10 prevalence on hospitalization rates. My aim is to determine whether a direct link between PM10 concentration and COPD rates can be established through statistical significance testing. After applying regression analysis across varying gap periods, statistically significant p-values were found and further narrowed down to show a stronger frequency of correlations found in certain regions. While the overall analysis did not establish a strong statewide correlation, a pattern emerged in the distribution of significant p-values across counties, suggesting that PM10 exposure may have a localized impact on COPD hospitalizations.
+
+## **Purpose of the Analysis**
+
+Chronic Obstructive Pulmonary Disease (COPD) is a leading cause of respiratory-related hospitalizations and mortality. PM10, which consists of particulate matter that is 10 micrometers or smaller in diameter, has been identified as a contributing factor to COPD. To determine whether there is a statistically significant correlation between PM10 concentrations and COPD hospitalization rates in California counties from 1990 to 2019, this analysis seeks to assess whether long-term exposure to PM10 influences COPD hospitalization rates, and if such a relationship can be found between the two sets of data containing annual PM10 air quality index (AQI) measurements and county-level hospitalization records.
+
+## **Research Question**
+
+“Can a direct link between PM10 concentration and COPD hospitalization rates be established through statistical significance testing?”
+
+## **Who May Benefit from This Analysis?**
+
+Although this analysis did not establish a statistically significant statewide correlation between PM10 concentrations and COPD hospitalization rates, the analysis framework may still be valuable to several groups:
+
+-   Statisticians: Those working in environmental and epidemiological data analysis can use this project as a case example for hypothesis testing, multiple comparison adjustments, and the challenges of working with real-world data.
+
+-   Environmental health researchers: This project provides a structured framework for future research. Analysts in environmental health, epidemiology, and public policy can replicate or refine these methods with larger datasets, alternative variables, or more advanced statistical techniques.
+
+-   Policymakers and regulatory agencies: Counties with a stronger association between PM10 and COPD hospitalizations could benefit from targeted public health campaigns. These could focus on reducing exposure, improving indoor air quality, and promoting protective measures for at-risk populations, such as the elderly and those with pre-existing respiratory conditions.
+
+## **Analysis Type**
+
+Hypothesis testing is used to focus on determining whether PM10 exposure is a significant predictor of COPD hospitalizations. The hypotheses tested are:
+
+-   Null Hypothesis: "There is no statistically significant correlation between PM10 concentration and COPD hospitalization rates."
+-   Alternative Hypothesis: "A statistically significant correlation exists between PM10 concentration and COPD hospitalization rates."
+
+Linear regression models are applied to the dataset, testing both raw hospitalization counts and population-adjusted rates against PM10 levels. The analysis focuses on p-values to assess statistical significance. After initial examination of multiple linear regression models, the Benjamini-Hochberg procedure is applied to control for false discoveries.
+
+## **Why This Approach?**
+
+Based on testing an assumption regarding air quality and respiratory health. Regression models allow for a structured approach to evaluating the potential impact of PM10 exposure on COPD hospitalizations. The incorporation of gap periods (1 to 9 years) allows for an investigation into whether PM10 exposure has immediate or delayed effects on respiratory health. This approach also helps assess the degree to which delayed effects contribute to COPD hospitalizations, considering that COPD develops over time due to prolonged exposure to air pollutants. By shifting AQI data forward relative to hospitalization records, the study aims to capture whether PM10 exposure at an earlier time influences COPD cases years later.
+
+To determine statistical significance, p-values were extracted from the regression models for each gap period. However, given that multiple hypothesis tests were conducted, the Benjamini-Hochberg procedure was applied to control for the false discovery rate. This procedure ranks p-values in ascending order and compares them to an adjusted significance threshold, reducing the likelihood of false positives that could arise from testing multiple models.
+
+## **Data**
+
+This analysis integrates two sources of data: air quality data and hospitalization records in California counties from 1990 to 2019. The air quality data was retrieved from the United States Environmental Protection Agency's website. It contains daily PM10 measurements, which were aggregated into yearly averages per county, and each CSV file separated by year was compiled into a single dataframe. The key variables analyzed were date, county name, and AQI. The hospitalization data was sourced from the California Health and Human Services Open Data Portal and originally contained records for various preventable hospitalizations. The dataset was narrowed to include only COPD-related cases, focusing on annual hospitalization counts for individuals aged 40 and older. The key variables include year, county, hospitalization count, and population estimates, allowing for the normalization of hospitalization rates.
+
+## **Cleaning the data:**
+
+### **Air Quality Data:**
+
+The data was transformed into annual averages per California county to align with hospitalization records. With records from multiple states totaling over 4 million entries, only rows where State.Name = "California" were retained to ensure consistency with the hospitalization dataset. The Date.Local column representing the specific day of measurement was extracted to create an annual summary for each county. Since PM10 levels fluctuate daily, an annual average AQI was calculated for each county using the aggregate function in R. This step helps smooth short-term variations while preserving long-term trends. While some counties had incomplete AQI data for certain years, these missing values were handled by removing counties with insufficient data. Then, a function (countUniqueCounties) was implemented to count the number of unique counties in each dataset to ensured that no unintended shifts in county representation occurred. Once these steps were completed for each year from 1990 to 2019, the processed datasets were merged into a single final AQI dataset containing the annual PM10 concentration per county.
+
+```{r, echo=FALSE}
+cleanedAqiData <- read.csv("cleanedAqiData.csv")
+head(cleanedAqiData)
+```
+
+### **COPD Hospitalization Data:**
+
+The dataset originally included various hospitalization causes. To isolate COPD-related hospitalizations, only rows where PQIDescription = "COPD or Asthma in Older Adults (Age 40+)" were retained. The Count_ICD10 and Population_ICD10 columns were reformatted to remove commas and converted into integer values to ensure they could be properly analyzed. As the original dataset contained hospitalization records coded under both ICD-9 and ICD-10 classifications, some counties had data under one system but not the other. So, a new variable (OverallCount and OverallPopulation) was created to merge the most complete data from both coding systems. Afterwards, rows with missing or zero population values were removed to prevent errors in population-adjusted calculations. Statewide summaries were also in the original dataset, which was removed since the analysis required county-level data. Once these steps were completed, the cleaned COPD dataset contained only county-level hospitalization counts for COPD and their respective population estimates.
+
+```{r, echo=FALSE, warning=FALSE, message=FALSE}
+cleanedCOPDdata <- read.csv("cleanedCOPDdata.csv")
+head(cleanedCOPDdata)
+```
+
+After data cleaning, the final merged dataset includes annual PM10 AQI values and COPD hospitalization records for multiple counties over a 30-year period.
+
+```{r, echo=FALSE}
+mergedData <- read.csv("mergedData.csv")
+head(mergedData)
+```
+
+## **Analysis**
+
+```{r, echo=FALSE}
+countyEntryCounts <- read.csv("countyEntryCounts.csv")
+head(countyEntryCounts)
+```
+
+With the availability of county data having varied cases of complete COPD and AQI data, a maximum 9-year lag period was determined based on the available overlapping data between AQI and COPD hospitalization records. For further accuracy and completeness, my data analysis includes only counties with 19 entries and 25 AQI entries where both COPD and AQI data are available, for which two types of linear regression models were applied:
+
+-   Model 1: COPD case counts (OverallCount) and PM10 levels (LaggedAQI).
+-   Model 2: COPD rates per population (OverallCount / OverallPopulation) \~ PM10 levels (LaggedAQI).
+
+After running linear regression models across multiple counties and lag periods, p-values were extracted from each model’s regression summary, specifically from the coefficient associated with PM10 concentration. The function getPValue was used as a part of extractPValuesForCounties to iterate through each county result.
+
+```{r, echo=FALSE}
+pValuesDF <- read.csv("pValuesDF.csv")
+head(pValuesDF)
+```
+
+```{r, echo=FALSE}
+barplot(table(pValuesDF$GapPeriod[pValuesDF$Model == "Count"]), 
+        xlab = "Gap Period",
+        ylab = "Frequency",
+        main = "Significant P-Values (Count)")
+
+barplot(table(pValuesDF$GapPeriod[pValuesDF$Model == "Count/Population"]), 
+        xlab = "Gap Period",
+        ylab = "Frequency",
+        main = "Significant P-Values (Count/Population)")
+
+```
+
+After extracting p-values from our 648 linear regression models (covering different counties and lag periods), it was found that only 33% of the models showed significant results. In the majority of cases, PM10 concentration did not exhibit a strong statistical relationship with COPD hospitalization rates. Additionally, the number of significant p-values increased with longer gap periods, suggesting that the delayed effects of PM10 exposure may play a role in COPD hospitalizations. Either way, multiple statistical tests were performed (two regression model per county per lag period), so the Benjamini-Hochberg procedure was used in the function bhProcedure to account for the increased likelihood of false positives.
+
+The more hypothesis tests conducted, the greater the probability that some results appear significant purely by chance, so the following steps were performed on the resulting p-values:
+
+-   P-values are ranked in ascending order from smallest to largest.
+-   For each rank, an adjusted significance threshold was calculated $$ \text{Threshold} = \left( \frac{\text{Rank}}{\text{Total Tests}} \right) \times 0.05 $$
+-   Each p-value is compared to their respective threshold, and is marked TRUE if less than or FALSE if greater than.
+
+```{r, echo=FALSE}
+pValuesCount <- read.csv("pValuesCount.csv")
+head(pValuesCount)
+```
+
+```{r, echo=FALSE}
+pValuesCountPop <- read.csv("pValuesCountPop.csv")
+head(pValuesCountPop)
+```
+
+```{r, echo=FALSE}
+knitr::include_graphics(c("Count_Barplot.png", "Count_Population_Barplot.png", "CAPPlot.png"))
+
+```
+
+After applying the Benjamini-Hochberg procedure, 104 models remained significant. Additionally, an interesting pattern emerged in the distribution of significant results across different lag periods, in which the frequency of significant p-values appeared to be elevated in certain counties like Marin, Shasta, and Santa Clara. The distribution of significant p-values according to county remained relatively consistent between the count and count/population models,
+
+## **Conclusion**
+
+Since the pattern is not entirely random, and certain counties show a higher frequency of significant results, we have sufficient evidence to reject the null hypothesis at an appropriate significance level. This suggests that PM10 concentration is likely associated with COPD hospitalization rates, though further analysis is needed to quantify the strength and nature of this relationship. Further research incorporating larger datasets, additional variables, and alternative modeling techniques can provide deeper insights into the relationship between air quality and respiratory health.
