@@ -1,4 +1,4 @@
-# air-quality-analysis
+# Air Quality Analysis Across California Counties - Python & R Implementation
 
 Author: Brandon Wu  
 
@@ -141,6 +141,15 @@ python copd_pm10_panel.py
 7. Outputs I review: 
    - `panel_poisson_summary.txt` and `panel_poisson_coefs.csv` for effect sizes and p-values  
    - `panel_poisson_lag_wald_test.txt` for the joint significance of lags  
-   - (Optional) `per_county_ols_bh_*.csv` and the corresponding figures to compare with the R results
 
 8. Interpretation notes: PM10 concentration is more interpretable than AQI. Poisson with an offset is appropriate for counts. County fixed effects absorb time-invariant local differences; year fixed effects absorb statewide shocks (policy, coding, wildfire years). The placebo helps guard against spurious correlations.
+
+---
+
+## Repository contents and R implementation
+
+This repository contains the Python pipeline and the original R implementation, along with the supplementary outputs generated during analysis. The folder already includes the processed CSVs (e.g., `merged_panel.csv`, BH-adjusted p-value tables) and figures used in the report, so the project is fully browsable without rerunning the code.
+
+### R implementation (scope and purpose)
+- The R notebook in `r/` documents the early version of the analysis and final narrative report. It focuses on per-county OLS regressions with Benjamini–Hochberg correction, consistent with the study design described in the report.  
+- **Scope note.** The R implementation was intentionally limited to a smaller geographic scope
