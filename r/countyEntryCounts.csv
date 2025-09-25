@@ -1,0 +1,57 @@
+"County","COPD_Entries","AQI_Entries","Both_Entries"
+"Alameda",19,21,6
+"Amador",19,1,0
+"Butte",19,25,10
+"Calaveras",19,21,10
+"Colusa",19,25,10
+"Contra Costa",19,25,10
+"Del Norte",19,19,9
+"El Dorado",19,21,6
+"Fresno",19,25,10
+"Glenn",19,25,10
+"Humboldt",19,22,10
+"Imperial",19,25,10
+"Inyo",18,25,10
+"Kern",19,25,10
+"Kings",19,25,10
+"Lake",19,14,2
+"Lassen",19,6,0
+"Los Angeles",19,25,10
+"Madera",19,12,5
+"Marin",19,25,10
+"Mariposa",19,25,10
+"Mendocino",19,25,10
+"Merced",19,23,10
+"Modoc",13,8,0
+"Mono",1,25,1
+"Monterey",19,25,10
+"Napa",19,25,10
+"Nevada",19,14,2
+"Orange",19,25,10
+"Placer",19,25,10
+"Plumas",19,18,3
+"Riverside",19,25,10
+"Sacramento",19,25,10
+"San Benito",19,25,10
+"San Bernardino",19,25,10
+"San Diego",19,25,10
+"San Francisco",19,25,10
+"San Joaquin",19,25,10
+"San Luis Obispo",19,25,10
+"San Mateo",19,19,4
+"Santa Barbara",19,25,10
+"Santa Clara",19,25,10
+"Santa Cruz",19,21,7
+"Shasta",19,25,10
+"Sierra",3,5,0
+"Siskiyou",19,25,10
+"Solano",19,25,10
+"Sonoma",19,25,10
+"Stanislaus",19,25,10
+"Sutter",19,25,10
+"Tehama",19,25,10
+"Trinity",14,19,9
+"Tulare",19,25,10
+"Ventura",19,25,10
+"Yolo",19,25,10
+"Yuba",19,2,0
