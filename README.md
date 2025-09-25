@@ -106,12 +106,11 @@ This project does not auto-download data. Place the following files in `./data/`
 
 ### Suggested directory layout
 ./data/
-├── daily_81102_1990.csv
-├── daily_81102_1991.csv
-├── …
-├── daily_81102_2014.csv
-├── CAHospitalizations.csv
-└── (optional) ca_county_fips.csv
+    daily_81102_1990.csv
+    daily_81102_1991.csv
+    ...
+    daily_81102_2014.csv
+    CAHospitalizations.csv
 
 ### Installation
 pip install pandas numpy statsmodels linearmodels matplotlib geopandas shapely pyproj us
