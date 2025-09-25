@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Project
+data/*
+!data/README.md
+outputs/*
+!outputs/.gitkeep
+figs/*.pdf
