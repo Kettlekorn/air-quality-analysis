@@ -1,0 +1,8 @@
+pandas
+numpy
+statsmodels
+matplotlib
+geopandas
+shapely
+pyproj
+us
